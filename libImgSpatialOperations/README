@@ -1,0 +1,4 @@
+libImgSpatialOperations
+=======================
+
+personal implementation of common spatial image operations, the principal goal of this project is help me to better understand many image processing algorithm. And the second goal is to provides my team with clear, lightweight and easy to compile codes
