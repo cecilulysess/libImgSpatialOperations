@@ -3,9 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libImgSpatialOperations", "libImgSpatialOperations\libImgSpatialOperations.vcxproj", "{537C05B3-F63B-41A1-A10C-BCD242A40806}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sampleProgram", "sampleProgram\sampleProgram.vcxproj", "{BF5C419D-33F4-4F5A-B4F4-F6AE8852B1B0}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "testProject", "testProject\testProject.vcxproj", "{BCB048CA-386C-481B-B942-503601643B97}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B465E157-1941-43A3-A9A9-A7AB8C98F9FD}"
+	ProjectSection(SolutionItems) = preProject
+		libImgSpatialOperations.vsmdi = libImgSpatialOperations.vsmdi
+		Local.testsettings = Local.testsettings
+		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
+	EndProjectSection
 EndProject
 Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = libImgSpatialOperations.vsmdi
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
 		Release|Win32 = Release|Win32
@@ -15,10 +25,10 @@ Global
 		{537C05B3-F63B-41A1-A10C-BCD242A40806}.Debug|Win32.Build.0 = Debug|Win32
 		{537C05B3-F63B-41A1-A10C-BCD242A40806}.Release|Win32.ActiveCfg = Release|Win32
 		{537C05B3-F63B-41A1-A10C-BCD242A40806}.Release|Win32.Build.0 = Release|Win32
-		{BF5C419D-33F4-4F5A-B4F4-F6AE8852B1B0}.Debug|Win32.ActiveCfg = Debug|Win32
-		{BF5C419D-33F4-4F5A-B4F4-F6AE8852B1B0}.Debug|Win32.Build.0 = Debug|Win32
-		{BF5C419D-33F4-4F5A-B4F4-F6AE8852B1B0}.Release|Win32.ActiveCfg = Release|Win32
-		{BF5C419D-33F4-4F5A-B4F4-F6AE8852B1B0}.Release|Win32.Build.0 = Release|Win32
+		{BCB048CA-386C-481B-B942-503601643B97}.Debug|Win32.ActiveCfg = Debug|Win32
+		{BCB048CA-386C-481B-B942-503601643B97}.Debug|Win32.Build.0 = Debug|Win32
+		{BCB048CA-386C-481B-B942-503601643B97}.Release|Win32.ActiveCfg = Release|Win32
+		{BCB048CA-386C-481B-B942-503601643B97}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
