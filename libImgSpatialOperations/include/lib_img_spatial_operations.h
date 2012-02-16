@@ -23,8 +23,6 @@
 
 
 namespace lib_img_spatial_operations {
-  
-
   // Defined in gray_level_image.cpp
   // GrayLevelImage4Byte describe a gray level image with its width and height.
   // All of the image processed in this library should be the instance of 
@@ -91,17 +89,36 @@ namespace lib_img_spatial_operations {
     // a new image as the result. Note that this method will never change
     // the source_img
     virtual GrayLevelImage4Byte& FilterImage(
-        GrayLevelImage4Byte& source_img) const = 0;
+        const GrayLevelImage4Byte& source_img) const = 0;
   };
 
-  // performing Otsu thresholding in source_img
+  // performing Otsu thresholding to source_img
   class CLASS_DECLSPEC GraylevelOtsuThresholdingOp : public GrayLevelImageOp {
   public:
     // A serial number used by the library to determine the code version
     static const int kSerialNumber  = 0x10000001;
 
     GrayLevelImage4Byte& FilterImage(
-        GrayLevelImage4Byte& source_img) const;
+        const GrayLevelImage4Byte& source_img) const;
+  };
+
+  // performing Image crop operation to source_img
+  class CLASS_DECLSPEC GraylevelImageCropOp : public GrayLevelImageOp {
+  public:
+    // A serial number used by the library to determine the code version
+    static const int kSerialNumber  = 0x10000001;
+
+    // constructor, setting the crop parameter
+    GraylevelImageCropOp(int x, int y, int width, int height);
+
+    // conduct the crop operation
+    // throw invalid_argument if the parameter is invalid
+    GrayLevelImage4Byte& FilterImage(
+        const GrayLevelImage4Byte& source_img) const;
+
+  private:
+    //crop parameter
+    int x_, y_, width_, height_;
   };
 
   // a histogram for gray level image
@@ -134,6 +151,50 @@ namespace lib_img_spatial_operations {
     double* normalized_histogram_;
     int gray_level_;
 
+  };
+
+  // Remove the boarder of a image that contains a rectangle object at the center
+  // Typically, this would be a calibarited scanned document 
+  class CLASS_DECLSPEC GraylevelImageWhiteRatioBoarderRemoveOp : 
+      public GrayLevelImageOp {
+  public:
+    // A serial number used by the library to determine the code version
+    static const int kSerialNumber  = 0x10000001;
+
+    // constructor, setting the ratio_threshold such that when the white ratio
+    // is larger than it will be determined as a boarder line
+    // if the value of pixel >= white_threshold then it will be trate as 
+    // white pixel
+    GraylevelImageWhiteRatioBoarderRemoveOp(double ratio_threshold,
+                                            int white_threshold);
+
+    // accessors
+    int crop_coordinate_x();
+    int crop_coordinate_y();
+    int crop_width();
+    int crop_height();
+
+    // receiving a gray level image and applying Otsu thresholding to get
+    // the binarized image of the source_img, and then conduce the row and 
+    // column based white pixel statistic, and crop the source_img to a new
+    // image as return
+    // throw invalid_argument if the parameter is invalid
+    // this method can only operating graylevel image, however,
+    // if you want to use the information for other purpose, you can
+    // use the accessor to the the crop coordinates;
+    GrayLevelImage4Byte& FilterImage(
+        const GrayLevelImage4Byte& source_img) const;
+  private:
+    // get the white ratio of given row or column at search_index
+    // if !is_row then is column
+    double GetWhiteRatio(const GrayLevelImage4Byte& source_img, 
+                         int search_index, bool is_row) const ;
+    //white ratio threshold
+    double ratio_threshold_;
+    int white_threshold_;
+
+    // store the crop coordinate and width and height for other usage
+    int crop_coordinate_x_, crop_coordinate_y_, crop_width_, crop_height_;
   };
 
 } // namespace lib_img_spatial_operations

@@ -8,9 +8,7 @@
 #include <fstream>
 
 using namespace std;
-using ::lib_img_spatial_operations::GrayLevelImage4Byte;
-using ::lib_img_spatial_operations::GrayLevelImageHistogram;
-using ::lib_img_spatial_operations::GraylevelOtsuThresholdingOp;
+using namespace lib_img_spatial_operations;
 int main(){
 
   ifstream iff("D:\\Dropbox\\OtherPrograms\\CV\\Others\\Border Remover\\libImgSpatialOperations\\Debug\\testImage.dat");
@@ -28,9 +26,9 @@ int main(){
   cout<<img.height() <<"\t" <<img.width()<<endl;
   GrayLevelImageHistogram hist = GrayLevelImageHistogram(img);
   hist.OutputHistogram("testImghist.txt");
-  GraylevelOtsuThresholdingOp otsu_thresolding = GraylevelOtsuThresholdingOp();
-  GrayLevelImage4Byte& resimg = otsu_thresolding.FilterImage(img);
-  ofstream off("binaryImg.txt");
+  GrayLevelImageOp* img_op = new GraylevelImageWhiteRatioBoarderRemoveOp(0.1, 128);
+  GrayLevelImage4Byte resimg = img_op->FilterImage(img);
+  ofstream off("resultImg.txt");
   for (int i = 0; i < resimg.height(); ++i) {
     for (int j = 0; j < resimg.width(); ++j) {
       off<<resimg.GetPixel(j,i)<<',';
