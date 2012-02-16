@@ -1,4 +1,4 @@
-// libImgSpatialOperating - Yanxiang Wu's implementation of many frequently
+// libImgSpatialOperations - Yanxiang Wu's implementation of many frequently
 // used spatial image operations
 // Copyright 2012 Yanxiang Wu. All right reserved
 // https://github.com/cecilulysess/libImgSpatialOperations
@@ -24,6 +24,7 @@
 
 namespace lib_img_spatial_operations {
   
+
   // Defined in gray_level_image.cpp
   // GrayLevelImage4Byte describe a gray level image with its width and height.
   // All of the image processed in this library should be the instance of 
@@ -73,12 +74,68 @@ namespace lib_img_spatial_operations {
     int height_, width_;
     int gray_level_;
 
+    // inner_name of this image, used for identification purpose
+    int id_;
+    static int obj_counter;
     // the content of the image
     int** image_data_;
-    int* test_;
   };
 
-  
+  // the interface for Operating of graylevel image
+  class CLASS_DECLSPEC GrayLevelImageOp {
+  public:
+    // A serial number used by the library to determine the code version
+    static const int kSerialNumber  = 0x10000001;
+
+    // FilterImage performing an operation at source_img and returen
+    // a new image as the result. Note that this method will never change
+    // the source_img
+    virtual GrayLevelImage4Byte& FilterImage(
+        GrayLevelImage4Byte& source_img) const = 0;
+  };
+
+  // performing Otsu thresholding in source_img
+  class CLASS_DECLSPEC GraylevelOtsuThresholdingOp : public GrayLevelImageOp {
+  public:
+    // A serial number used by the library to determine the code version
+    static const int kSerialNumber  = 0x10000001;
+
+    GrayLevelImage4Byte& FilterImage(
+        GrayLevelImage4Byte& source_img) const;
+  };
+
+  // a histogram for gray level image
+  class CLASS_DECLSPEC GrayLevelImageHistogram {
+  public:
+    // A serial number used by the library to determine the code version
+    static const int kSerialNumber  = 0x10000001;
+
+    // Constructor:
+    // create a histogram of given image
+    GrayLevelImageHistogram(const GrayLevelImage4Byte& image);
+
+    // accessor
+    
+    // get the histogram
+    const int* histogram() const;
+
+    // get the normalized histogram
+    const double* normalized_histogram() const;
+
+    // get the gray level of this histogram
+    int gray_level() const;
+
+    #ifdef _DEBUG
+    // debug using only, this will export the histogram to ./filename
+    void OutputHistogram(char* filename);
+    #endif
+  private:
+    int* histogram_;
+    double* normalized_histogram_;
+    int gray_level_;
+
+  };
+
 } // namespace lib_img_spatial_operations
 
 #endif //LIB_IMG_SPATIAL_OPERATIONS_H_

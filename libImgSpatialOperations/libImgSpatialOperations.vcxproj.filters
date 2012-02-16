@@ -26,5 +26,11 @@
     <ClCompile Include="gray_level_image.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="histogram.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gray_level_thresholding_ops.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
