@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TemplateProject", "TemplateProject\TemplateProject.vcxproj", "{12554265-B9D9-4233-A37F-FA5860A9F849}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = libImgSpatialOperations.vsmdi
@@ -29,6 +31,10 @@ Global
 		{BCB048CA-386C-481B-B942-503601643B97}.Debug|Win32.Build.0 = Debug|Win32
 		{BCB048CA-386C-481B-B942-503601643B97}.Release|Win32.ActiveCfg = Release|Win32
 		{BCB048CA-386C-481B-B942-503601643B97}.Release|Win32.Build.0 = Release|Win32
+		{12554265-B9D9-4233-A37F-FA5860A9F849}.Debug|Win32.ActiveCfg = Debug|Win32
+		{12554265-B9D9-4233-A37F-FA5860A9F849}.Debug|Win32.Build.0 = Debug|Win32
+		{12554265-B9D9-4233-A37F-FA5860A9F849}.Release|Win32.ActiveCfg = Release|Win32
+		{12554265-B9D9-4233-A37F-FA5860A9F849}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
