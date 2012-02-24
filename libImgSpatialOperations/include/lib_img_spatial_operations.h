@@ -79,6 +79,8 @@ namespace lib_img_spatial_operations {
     int** image_data_;
   };
 
+//-----------------------------------------------------------------------------
+
   // the interface for Operating of graylevel image
   class CLASS_DECLSPEC GrayLevelImageOp {
   public:
@@ -92,6 +94,7 @@ namespace lib_img_spatial_operations {
         const GrayLevelImage4Byte& source_img) const = 0;
   };
 
+//-----------------------------------------------------------------------------
   // performing Otsu thresholding to source_img
   class CLASS_DECLSPEC GraylevelOtsuThresholdingOp : public GrayLevelImageOp {
   public:
@@ -102,6 +105,7 @@ namespace lib_img_spatial_operations {
         const GrayLevelImage4Byte& source_img) const;
   };
 
+//-----------------------------------------------------------------------------
   // performing Image crop operation to source_img
   class CLASS_DECLSPEC GraylevelImageCropOp : public GrayLevelImageOp {
   public:
@@ -115,12 +119,13 @@ namespace lib_img_spatial_operations {
     // throw invalid_argument if the parameter is invalid
     GrayLevelImage4Byte& FilterImage(
         const GrayLevelImage4Byte& source_img) const;
-
   private:
     //crop parameter
     int x_, y_, width_, height_;
   };
 
+
+//-----------------------------------------------------------------------------
   // a histogram for gray level image
   class CLASS_DECLSPEC GrayLevelImageHistogram {
   public:
@@ -153,7 +158,9 @@ namespace lib_img_spatial_operations {
 
   };
 
-  // Remove the boarder of a image that contains a rectangle object at the center
+//-----------------------------------------------------------------------------
+  // Remove the boarder of a image that contains a rectangle object at the 
+  // center
   // Typically, this would be a calibarited scanned document 
   class CLASS_DECLSPEC GraylevelImageWhiteRatioBoarderRemoveOp : 
       public GrayLevelImageOp {
@@ -194,7 +201,9 @@ namespace lib_img_spatial_operations {
     int white_threshold_;
 
     // store the crop coordinate and width and height for other usage
-    int crop_coordinate_x_, crop_coordinate_y_, crop_width_, crop_height_;
+    // Conceptual constness, once you filter the image, this operation
+    // should provides the new x, y coordinate and width and height
+    mutable int crop_coordinate_x_, crop_coordinate_y_, crop_width_, crop_height_;
   };
 
 } // namespace lib_img_spatial_operations
