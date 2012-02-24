@@ -92,6 +92,10 @@ namespace lib_img_spatial_operations {
     height = y2 - y1;
     GraylevelImageCropOp crop_op = 
         GraylevelImageCropOp(x1, y1, width, height);
+    this->crop_coordinate_x_ = x1;
+    this->crop_coordinate_y_ = y1;
+    this->crop_height_ = height;
+    this->crop_width_ = width;
     return crop_op.FilterImage(resimg);
   }
 
