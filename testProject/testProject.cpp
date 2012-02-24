@@ -4,7 +4,7 @@
 #include "stdafx.h"
 
 #include <iostream>
-#include "lib_img_spatial_operations.h"
+#include "..\libImgSpatialOperations\include\lib_img_spatial_operations.h"
 #include <fstream>
 
 using namespace std;
