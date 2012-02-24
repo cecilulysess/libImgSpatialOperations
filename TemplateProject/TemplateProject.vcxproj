@@ -52,6 +52,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\libImgSpatialOperations\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -78,6 +79,15 @@
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="OpenCVTest.cpp" />
+    <ClCompile Include="opencv_interoperators.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="opencv_interoperators.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\libImgSpatialOperations\libImgSpatialOperations.vcxproj">
+      <Project>{537c05b3-f63b-41a1-a10c-bcd242a40806}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

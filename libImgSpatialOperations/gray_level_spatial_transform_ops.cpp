@@ -12,6 +12,10 @@
 #include "include/lib_img_spatial_operations.h"
 
 #include <stdexcept>
+#ifdef _DEBUG
+  #include <iostream>  
+  using namespace std;
+#endif
 
 namespace lib_img_spatial_operations {
   GraylevelImageCropOp::GraylevelImageCropOp(
@@ -74,6 +78,9 @@ namespace lib_img_spatial_operations {
     for (int i = 0 ; i < resimg.width(); ++i) {
       // if suddently find a line larger than threshold, 
       // this is the first boarder
+#ifdef _DEBUG
+  cout<<i<<"th line's white ratio: "<<this->GetWhiteRatio(resimg, i, false)<<endl;
+#endif
       if (is_first_border &&
           this->GetWhiteRatio(resimg, i, false) >= 
           this->ratio_threshold_) {

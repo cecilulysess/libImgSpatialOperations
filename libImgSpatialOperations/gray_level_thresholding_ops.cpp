@@ -35,9 +35,6 @@ namespace lib_img_spatial_operations {
     for (int i = 0; i < graylevel; ++i) {
       mu_T += (i*normalized_histogram[i]);
     }
-#ifdef _DEBUG
-  ofstream off("sigmab.txt");
-#endif
     // find the best threshold value
     for (;current_threshold < graylevel - 1; ++current_threshold) {
       // check the omega_K in case of the occurancy of number/epsilon = infinit
@@ -52,17 +49,11 @@ namespace lib_img_spatial_operations {
         best_threshold = current_threshold;
       }
 
-#ifdef _DEBUG
-  off<<sigma_between<<",";
-#endif
 
       //update the four variables for next round
       omega_K += normalized_histogram[current_threshold];
       mu_K += current_threshold * normalized_histogram[current_threshold];
     }
-#ifdef _DEBUG
-  off.close();
-#endif
     // generate the new binary image
     int** new_img = new int*[source_img.height()];
     for (int i = 0; i < source_img.height(); ++i) {
