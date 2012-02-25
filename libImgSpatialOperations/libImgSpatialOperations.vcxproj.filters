@@ -21,6 +21,12 @@
     <ClInclude Include="include\lib_img_spatial_operations.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="opencv_interoperator_debug.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\opencv_interoperators.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gray_level_image.cpp">
@@ -33,6 +39,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="gray_level_spatial_transform_ops.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="opencv_interoperators.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

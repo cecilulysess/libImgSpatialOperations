@@ -32,9 +32,11 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="OpenCV_Debug.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="OpenCV_Release.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -50,10 +52,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_EXPORTINGLISO;WIN32;_DEBUG;_WINDOWS;_USRDLL;LIBIMGSPATIALOPERATIONS_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\libOpenCVInteroperators\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -75,12 +80,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="include\lib_img_spatial_operations.h" />
+    <ClInclude Include="include\opencv_interoperators.h" />
+    <ClInclude Include="opencv_interoperator_debug.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gray_level_spatial_transform_ops.cpp" />
     <ClCompile Include="gray_level_image.cpp" />
     <ClCompile Include="gray_level_thresholding_ops.cpp" />
     <ClCompile Include="histogram.cpp" />
+    <ClCompile Include="opencv_interoperators.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README" />

@@ -14,6 +14,8 @@
 #include <stdexcept>
 #ifdef _DEBUG
   #include <iostream>  
+  #include "opencv2\highgui\highgui.hpp"
+  #include "opencv_interoperator_debug.h"
   using namespace std;
 #endif
 
@@ -22,7 +24,7 @@ namespace lib_img_spatial_operations {
       int x, int y, int width, int height) : 
       x_(x), y_(y), width_(width), height_(height) { }
 
-  GrayLevelImage4Byte& GraylevelImageCropOp::FilterImage(
+  GrayLevelImage4Byte* GraylevelImageCropOp::FilterImage(
       const GrayLevelImage4Byte& source_img) const {
     // valid the parameter
     if (x_ * y_ < 0 || width_ * height_ < 0 ||  //check the negative case
@@ -39,7 +41,7 @@ namespace lib_img_spatial_operations {
       }
     }
     GrayLevelImage4Byte* newImg = new GrayLevelImage4Byte(width_, height_, new_img);
-    return *newImg;
+    return newImg;
   }
 
   GraylevelImageWhiteRatioBoarderRemoveOp::
@@ -47,27 +49,38 @@ namespace lib_img_spatial_operations {
                                               int white_threshold) :
       ratio_threshold_(ratio_threshold), white_threshold_(white_threshold) { }
 
-  GrayLevelImage4Byte& GraylevelImageWhiteRatioBoarderRemoveOp::
+  GrayLevelImage4Byte* GraylevelImageWhiteRatioBoarderRemoveOp::
       FilterImage(
           const GrayLevelImage4Byte& source_img) const {
     // get the binary image
     GraylevelOtsuThresholdingOp otsu_thresolding = GraylevelOtsuThresholdingOp();
-    GrayLevelImage4Byte& resimg = otsu_thresolding.FilterImage(source_img);
+    GrayLevelImage4Byte* resimg = otsu_thresolding.FilterImage(source_img);
+#ifdef _DEBUG
+  /*for (int i = 0 ; i < resimg->height(); ++i) {
+    cout<<resimg->GetPixel(resimg->width()/2, i);
+  }
+  cout<<endl;*/
+  //OpenCVInteroperator::ShowImage( source_img, "Image to threshold");
+  OpenCVInteroperator::ShowImage( *resimg, "Thresholded Result");
+  cv::imwrite("ThresholdedResult.jpg",
+      *OpenCVInteroperator::GetMatFromGrayLevelImage4Byte(*resimg));
+  //OpenCVInteroperator::GetMatFromGrayLevelImage4Byte(&resimg);
+#endif
     // find the crop rectangle
-    int x1, y1, x2, y2, width, height;
+    int x1 = -1, y1 = -1, x2 = -1, y2 = -1, width = -1, height = -1;
     bool is_first_border = true;
     //find y
-    for (int i = 0 ; i < resimg.height(); ++i) {
+    for (int i = 0 ; i < resimg->height(); ++i) {
       // if suddently find a line larger than threshold, 
       // this is the first boarder
       if (is_first_border &&
-          this->GetWhiteRatio(resimg, i, true) >= 
+          this->GetWhiteRatio(*resimg, i, true) >= 
           this->ratio_threshold_) {
         is_first_border = false;
         y1 = i;
       } else {
         if (!is_first_border &&
-            this->GetWhiteRatio(resimg, i, true) < ratio_threshold_) {
+            this->GetWhiteRatio(*resimg, i, true) < ratio_threshold_) {
           y2 = i - 1;
           break;
         }
@@ -75,25 +88,29 @@ namespace lib_img_spatial_operations {
     }
     is_first_border = true;
     //find x
-    for (int i = 0 ; i < resimg.width(); ++i) {
+    for (int i = 0 ; i < resimg->width(); ++i) {
       // if suddently find a line larger than threshold, 
       // this is the first boarder
 #ifdef _DEBUG
-  cout<<i<<"th line's white ratio: "<<this->GetWhiteRatio(resimg, i, false)<<endl;
+  //cout<<i<<"th line's white ratio: "<<this->GetWhiteRatio(*resimg, i, false)<<endl;
 #endif
       if (is_first_border &&
-          this->GetWhiteRatio(resimg, i, false) >= 
+          this->GetWhiteRatio(*resimg, i, false) >= 
           this->ratio_threshold_) {
         is_first_border = false;
         x1 = i;
       } else {
-        double tmp = this->GetWhiteRatio(resimg, i, false);
+        double tmp = this->GetWhiteRatio(*resimg, i, false);
         if (!is_first_border &&
-            this->GetWhiteRatio(resimg, i, false) < ratio_threshold_) {
+            this->GetWhiteRatio(*resimg, i, false) < ratio_threshold_) {
           x2 = i - 1;
           break;
         }
       }
+    }
+    if (x1 <= 0 || x2 <= 0 || y1 <= 0 || y2 <= 0) {
+      throw new std::invalid_argument(
+        "Source Image cannot filtered correctly");
     }
     width = x2 - x1;
     height = y2 - y1;
@@ -103,7 +120,7 @@ namespace lib_img_spatial_operations {
     this->crop_coordinate_y_ = y1;
     this->crop_height_ = height;
     this->crop_width_ = width;
-    return crop_op.FilterImage(resimg);
+    return crop_op.FilterImage(*resimg);
   }
 
   double GraylevelImageWhiteRatioBoarderRemoveOp::GetWhiteRatio(

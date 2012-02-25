@@ -28,3 +28,4 @@ _ReSharper*/
 *.opensdf
 *.sdf
 [Ii]pch*/
+*.csv

@@ -11,14 +11,18 @@
 // due to the trick used below about the dllexport and dllimport, please 
 // directly include this header file with your client program
 
+
 #ifndef LIB_IMG_SPATIAL_OPERATIONS_H_
 #define LIB_IMG_SPATIAL_OPERATIONS_H_
 
 // trick to automatic import and export at both client and dll
+//#ifdef LISO_CLASS_DECLSPEC
+//  #undef LISO_CLASS_DECLSPEC
+//#endif
 #ifdef _EXPORTINGLISO
-   #define CLASS_DECLSPEC    __declspec(dllexport)
+  #define LISO_CLASS_DECLSPEC    __declspec(dllexport)
 #else
-   #define CLASS_DECLSPEC    __declspec(dllimport)
+  #define LISO_CLASS_DECLSPEC    __declspec(dllimport)
 #endif
 
 
@@ -28,7 +32,7 @@ namespace lib_img_spatial_operations {
   // All of the image processed in this library should be the instance of 
   // this class
   // The original information of this image is a unsigned int** 2D array
-  class CLASS_DECLSPEC GrayLevelImage4Byte {
+  class LISO_CLASS_DECLSPEC GrayLevelImage4Byte {
     
   public:
     // A serial number used by the library to determine the code version
@@ -82,7 +86,7 @@ namespace lib_img_spatial_operations {
 //-----------------------------------------------------------------------------
 
   // the interface for Operating of graylevel image
-  class CLASS_DECLSPEC GrayLevelImageOp {
+  class LISO_CLASS_DECLSPEC GrayLevelImageOp {
   public:
     // A serial number used by the library to determine the code version
     static const int kSerialNumber  = 0x10000001;
@@ -90,24 +94,24 @@ namespace lib_img_spatial_operations {
     // FilterImage performing an operation at source_img and returen
     // a new image as the result. Note that this method will never change
     // the source_img
-    virtual GrayLevelImage4Byte& FilterImage(
+    virtual GrayLevelImage4Byte* FilterImage(
         const GrayLevelImage4Byte& source_img) const = 0;
   };
 
 //-----------------------------------------------------------------------------
   // performing Otsu thresholding to source_img
-  class CLASS_DECLSPEC GraylevelOtsuThresholdingOp : public GrayLevelImageOp {
+  class LISO_CLASS_DECLSPEC GraylevelOtsuThresholdingOp : public GrayLevelImageOp {
   public:
     // A serial number used by the library to determine the code version
     static const int kSerialNumber  = 0x10000001;
 
-    GrayLevelImage4Byte& FilterImage(
+    GrayLevelImage4Byte* FilterImage(
         const GrayLevelImage4Byte& source_img) const;
   };
 
 //-----------------------------------------------------------------------------
   // performing Image crop operation to source_img
-  class CLASS_DECLSPEC GraylevelImageCropOp : public GrayLevelImageOp {
+  class LISO_CLASS_DECLSPEC GraylevelImageCropOp : public GrayLevelImageOp {
   public:
     // A serial number used by the library to determine the code version
     static const int kSerialNumber  = 0x10000001;
@@ -117,7 +121,7 @@ namespace lib_img_spatial_operations {
 
     // conduct the crop operation
     // throw invalid_argument if the parameter is invalid
-    GrayLevelImage4Byte& FilterImage(
+    GrayLevelImage4Byte* FilterImage(
         const GrayLevelImage4Byte& source_img) const;
   private:
     //crop parameter
@@ -127,7 +131,7 @@ namespace lib_img_spatial_operations {
 
 //-----------------------------------------------------------------------------
   // a histogram for gray level image
-  class CLASS_DECLSPEC GrayLevelImageHistogram {
+  class LISO_CLASS_DECLSPEC GrayLevelImageHistogram {
   public:
     // A serial number used by the library to determine the code version
     static const int kSerialNumber  = 0x10000001;
@@ -162,7 +166,7 @@ namespace lib_img_spatial_operations {
   // Remove the boarder of a image that contains a rectangle object at the 
   // center
   // Typically, this would be a calibarited scanned document 
-  class CLASS_DECLSPEC GraylevelImageWhiteRatioBoarderRemoveOp : 
+  class LISO_CLASS_DECLSPEC GraylevelImageWhiteRatioBoarderRemoveOp : 
       public GrayLevelImageOp {
   public:
     // A serial number used by the library to determine the code version
@@ -189,7 +193,9 @@ namespace lib_img_spatial_operations {
     // this method can only operating graylevel image, however,
     // if you want to use the information for other purpose, you can
     // use the accessor to the the crop coordinates;
-    GrayLevelImage4Byte& FilterImage(
+    // throw invalid_argument exception if the source_img can not find 
+    // a valid border
+    GrayLevelImage4Byte* FilterImage(
         const GrayLevelImage4Byte& source_img) const;
   private:
     // get the white ratio of given row or column at search_index
@@ -207,5 +213,9 @@ namespace lib_img_spatial_operations {
   };
 
 } // namespace lib_img_spatial_operations
+
+#ifdef LISO_CLASS_DECLSPEC
+  #undef LISO_CLASS_DECLSPEC
+#endif
 
 #endif //LIB_IMG_SPATIAL_OPERATIONS_H_

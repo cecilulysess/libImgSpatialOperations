@@ -18,14 +18,26 @@
 
 
 namespace lib_img_spatial_operations {
-  GrayLevelImage4Byte& GraylevelOtsuThresholdingOp::FilterImage(
+  GrayLevelImage4Byte* GraylevelOtsuThresholdingOp::FilterImage(
       const GrayLevelImage4Byte& source_img) const{
 
     GrayLevelImageHistogram histo = GrayLevelImageHistogram(source_img);
+#ifdef _DEBUG
+ /* ofstream off("img4Thresholding.csv");
+  for (int i = 0; i < source_img.height(); ++i) {
+    for (int j = 0; j < source_img.width(); ++j) {
+      off<<source_img.GetPixel(j, i)<<',';
+    }
+    off<<'\n';
+}*/
+#endif
     int graylevel = histo.gray_level();
-    int best_threshold = 1, current_threshold = 1;
+    int best_threshold = 1, current_threshold = 0;
     double max_sigma_between = 0.0, sigma_between = 0.0;
     const double* normalized_histogram = histo.normalized_histogram();
+#ifdef _DEBUG
+  histo.OutputHistogram("histog.csv");
+#endif
     // ¦Ø_k = ¡Æ_0^k (Pi) stand for the probablity of graylevel is class 0
     double omega_K = normalized_histogram[0];
     // ¦Ì_T = ¡Æ i*Pi stand for the average of total pixels' graylevel
@@ -37,6 +49,11 @@ namespace lib_img_spatial_operations {
     }
     // find the best threshold value
     for (;current_threshold < graylevel - 1; ++current_threshold) {
+      
+      //update the  variables 
+      omega_K += normalized_histogram[current_threshold];
+      mu_K += current_threshold * normalized_histogram[current_threshold];
+
       // check the omega_K in case of the occurancy of number/epsilon = infinit
       if (omega_K < 1e-6 || (1 - omega_K) < 1e-6) {
         continue;
@@ -50,9 +67,6 @@ namespace lib_img_spatial_operations {
       }
 
 
-      //update the four variables for next round
-      omega_K += normalized_histogram[current_threshold];
-      mu_K += current_threshold * normalized_histogram[current_threshold];
     }
     // generate the new binary image
     int** new_img = new int*[source_img.height()];
@@ -67,7 +81,7 @@ namespace lib_img_spatial_operations {
       }
     }
     GrayLevelImage4Byte* res = new GrayLevelImage4Byte(
-        source_img.width(),source_img.height(), new_img);
-    return *res;
+        source_img.width(), source_img.height(), new_img);
+    return res;
   }
 }// ns lib_img_spatial_operations
